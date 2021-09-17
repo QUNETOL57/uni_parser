@@ -12,8 +12,12 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS educators (
   )""")
 
     
-
-cursor.execute("""INSERT INTO educators (name, subject, semestr, is_tutor)
-                  VALUES ('Котло Степан Александрович', 'Баскетбол', 4, false)""")
+def insert_educators(educators):
+  connect = sqlite3.connect('base.db')
+  cursor = connect.cursor()
+  # cursor.execute("""INSERT INTO educators (name, subject, semestr, is_tutor)
+  #                 VALUES ('Котло Степан Александрович', 'Баскетбол', 4, false)""")
+  cursor.executemany("INSERT INTO educators VALUES (?,?,?,?)", educators)
+  connect.commit()
 
 connect.commit()
