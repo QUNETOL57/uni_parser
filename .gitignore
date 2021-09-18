@@ -1,2 +1,3 @@
-/.env
-/base.db
+.env
+*.db
+__pycache__/
