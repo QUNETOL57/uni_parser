@@ -59,7 +59,6 @@ def set_teachers():
 			'is_tutor'	: teacher[1]
 		})
 
-
 def set_subjects():
 	"""Загружаем в базу список предметов"""
 	for key, section in sections.items():
@@ -79,4 +78,9 @@ def set_subjects():
 				})
 				
 
-set_subjects()
+def set_themes():
+	"""Загружаем в базу все темы для предметов"""
+		
+
+
+# set_teachers()
