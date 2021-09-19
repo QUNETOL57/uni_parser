@@ -1,11 +1,24 @@
 import sqlite3
+from typing import Dict, List, Tuple, Union
 
 DB_NAME = 'uni_base.db'
 
 connect = sqlite3.connect(DB_NAME)
 cursor = connect.cursor()
 
-def insert(table: str, column_values: dict):
+def feach_all(table: str, columns: Union[list,str] = '*') -> List[Tuple]:
+    cursor.execute(f"SELECT {columns} FROM {table}")
+    return cursor.fetchall()
+
+def feach(table: str, columns_value: Dict) -> Tuple:
+    where_part = ''
+    for column, value in columns_value.items():
+        where_part += f"{column}='{value}'"
+
+    cursor.execute(f"SELECT * FROM {table} WHERE " + where_part)
+    return cursor.fetchone()
+
+def insert(table: str, column_values: Dict):
     columns = ', '.join(column_values.keys())
     values = [tuple(column_values.values())]
     placeholders = ", ".join( "?" * len(column_values.keys()) )
@@ -15,7 +28,6 @@ def insert(table: str, column_values: dict):
         f"VALUES ({placeholders})",
         values)
     connect.commit()
-
 
 def get_cursor():
     return cursor

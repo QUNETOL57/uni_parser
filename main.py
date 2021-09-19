@@ -16,7 +16,7 @@ SEMESTR = 5
 session  = requests.Session()
 authorization = session.post(PORTAL_URL, data = {'name':MIREA_LOGIN,'pass':MIREA_PASSWORD})
 
-sections = [BeautifulSoup(session.get(f'{PORTAL_URL}edu_process.php?work_type={i}').text, 'lxml') for i in range(1,5)]
+sections = {i: BeautifulSoup(session.get(f'{PORTAL_URL}edu_process.php?work_type={i}').text, 'lxml') for i in range(1,5)}
 
 def get_educators():
 	"""Список страниц с предметами"""
@@ -41,7 +41,7 @@ def get_educators():
 def set_teachers():
 	"""Загружает в базу список предподавателей"""
 	teachers = set()
-	for section in sections:
+	for section in sections.values():
 		for line in section.find('table', class_='table-hover').find_all('tr')[1:]:
 			if line.find_all('td')[-1].find('a', class_='btn-danger'):
 				teacher_name = line.find_all('td')[-2].text
@@ -59,4 +59,24 @@ def set_teachers():
 			'is_tutor'	: teacher[1]
 		})
 
-set_teachers()
+
+def set_subjects():
+	"""Загружаем в базу список предметов"""
+	for key, section in sections.items():
+		semestr = section.find('option', selected=True)['value'] if section.find('option', selected=True) else ''
+		type_id = key
+		for line in section.find('table', class_='table-hover').find_all('tr')[1:]:
+			if line.find_all('td')[-1].find('a', class_='btn-danger'):
+				subject_name = line.find_all('td')[0].text
+				teacher_name = line.find_all('td')[-2].text
+				teacher_id = db.feach('teacher', {'name': teacher_name})[0]
+
+				db.insert('subject', {
+					'name': subject_name,
+					'semestr': semestr,
+					'type_id': type_id,
+					'teacher_id': teacher_id
+				})
+				
+
+set_subjects()
