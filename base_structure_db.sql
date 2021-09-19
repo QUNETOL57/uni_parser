@@ -22,10 +22,17 @@ CREATE TABLE subject (
     teacher_id  INTEGER       REFERENCES teacher (id) ON DELETE CASCADE
 );
 
+CREATE TABLE theme (
+    id          INTEGER       PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name        VARCHAR (255) NOT NULL,
+    subject_id  INTEGER       REFERENCES subject (id) ON DELETE CASCADE
+);
+
 CREATE TABLE message (
     id          INTEGER       PRIMARY KEY AUTOINCREMENT NOT NULL,
     teacher_id  INTEGER       REFERENCES teacher (id) ON DELETE CASCADE,
     subject_id  INTEGER       REFERENCES subject (id) ON DELETE CASCADE,
+    theme_id    INTEGER       REFERENCES theme (id) ON DELETE CASCADE,
     my_answer   BOOLEAN       NOT NULL,
     text        TEXT          NOT NULL,
     create_at   DATETIME      NOT NULL
