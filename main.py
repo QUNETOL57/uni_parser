@@ -65,22 +65,32 @@ def set_subjects():
 		semestr = section.find('option', selected=True)['value'] if section.find('option', selected=True) else ''
 		type_id = key
 		for line in section.find('table', class_='table-hover').find_all('tr')[1:]:
-			if line.find_all('td')[-1].find('a', class_='btn-danger'):
+			if btn := line.find_all('td')[-1].find('a', class_='btn-danger'):
 				subject_name = line.find_all('td')[0].text
 				teacher_name = line.find_all('td')[-2].text
-				teacher_id = db.feach('teacher', {'name': teacher_name})[0]
+				teacher_id = db.feach_one('teacher', {'name': teacher_name})[0]
+				btn_link = btn['href']
 
 				db.insert('subject', {
-					'name': subject_name,
-					'semestr': semestr,
-					'type_id': type_id,
-					'teacher_id': teacher_id
+					'name'		: subject_name,
+					'semestr'	: semestr,
+					'type_id'	: type_id,
+					'teacher_id': teacher_id,
+					'link'		: btn_link
 				})
+
 				
 
 def set_themes():
 	"""Загружаем в базу все темы для предметов"""
+	subjects = db.feach_all('subject', {'semestr': SEMESTR})
+	for subject in subjects:
+		theme = BeautifulSoup(session.get(f'{PORTAL_URL}{subject[-1]}').text, 'lxml').find('table', class_='table-hover').find_all('tr')[1:]
+		
+	print(theme)
+	
 		
 
-
 # set_teachers()
+# set_subjects()
+set_themes()
