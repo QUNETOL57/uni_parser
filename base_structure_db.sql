@@ -19,13 +19,18 @@ CREATE TABLE subject (
     name        VARCHAR (255) NOT NULL,
     semestr     INTEGER       NOT NULL,
     type_id     INTEGER       REFERENCES type (id) ON DELETE CASCADE,
-    teacher_id  INTEGER       REFERENCES teacher (id) ON DELETE CASCADE
+    teacher_id  INTEGER       REFERENCES teacher (id) ON DELETE CASCADE,
+    link        VARCHAR (255) NOT NULL
 );
 
 CREATE TABLE theme (
     id          INTEGER       PRIMARY KEY AUTOINCREMENT NOT NULL,
     name        VARCHAR (255) NOT NULL,
-    subject_id  INTEGER       REFERENCES subject (id) ON DELETE CASCADE
+    subject_id  INTEGER       REFERENCES subject (id) ON DELETE CASCADE,
+    semestr     INTEGER       NOT NULL,
+    messages    INTEGER       NOT NULL,
+    result      VARCHAR (255) NOT NULL,
+    link        VARCHAR (255) NOT NULL
 );
 
 CREATE TABLE message (

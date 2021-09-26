@@ -6,17 +6,26 @@ DB_NAME = 'uni_base.db'
 connect = sqlite3.connect(DB_NAME)
 cursor = connect.cursor()
 
-def feach_all(table: str, columns: Union[list,str] = '*') -> List[Tuple]:
+def feach(table: str, columns: Union[list,str] = '*') -> List[Tuple]:
     cursor.execute(f"SELECT {columns} FROM {table}")
     return cursor.fetchall()
 
-def feach(table: str, columns_value: Dict) -> Tuple:
+def feach_all(table: str, columns_value: Dict) -> Tuple:
+    _feach_part(table, columns_value)
+    return cursor.fetchall()
+
+def feach_one(table: str, columns_value: Dict) -> Tuple:
+    _feach_part(table, columns_value)
+    return cursor.fetchone()
+
+def _feach_part(table: str, columns_value: Dict):
+    # TODO исправить ошибку при мнодественном условии
     where_part = ''
     for column, value in columns_value.items():
         where_part += f"{column}='{value}'"
-
+        print(where_part)
     cursor.execute(f"SELECT * FROM {table} WHERE " + where_part)
-    return cursor.fetchone()
+
 
 def insert(table: str, column_values: Dict):
     columns = ', '.join(column_values.keys())
@@ -48,4 +57,4 @@ def check_db_exists():
         return
     _init_db()
 
-check_db_exists()   
+check_db_exists()       
