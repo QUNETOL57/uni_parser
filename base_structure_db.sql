@@ -27,6 +27,9 @@ CREATE TABLE theme (
     id          INTEGER       PRIMARY KEY AUTOINCREMENT NOT NULL,
     name        VARCHAR (255) NOT NULL,
     subject_id  INTEGER       REFERENCES subject (id) ON DELETE CASCADE,
+    semestr     INTEGER       NOT NULL,
+    messages    INTEGER       NOT NULL,
+    result      VARCHAR (255) NOT NULL,
     link        VARCHAR (255) NOT NULL
 );
 
