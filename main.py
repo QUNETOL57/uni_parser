@@ -88,4 +88,20 @@ def set_data():
 	set_themes()
 
 
-set_data()
+def check_messages():
+	subjects = db.feach_all('subject', {'semestr': SEMESTR})
+	for subject in subjects:
+		subject_page = BeautifulSoup(session.get(f'{PORTAL_URL}{subject[-1]}').text, 'lxml')
+		subject_themes_list = subject_page.find('table', class_='table-hover').find_all('tr')[1:]
+		for theme in subject_themes_list:
+			theme 			= theme.find_all('td')
+			theme_title 	= theme[0].text
+			theme_db = db.feach_one('theme', {
+				'name' 		: theme_title,
+				'subject_id': subject[0],
+				'semestr'	: SEMESTR				
+			})
+			print(theme_db)
+
+# set_data()
+check_messages()
