@@ -19,12 +19,12 @@ def feach_one(table: str, columns_value: Dict) -> Tuple:
     return cursor.fetchone()
 
 def _feach_part(table: str, columns_value: Dict):
-    # TODO исправить ошибку при мнодественном условии
     where_part = ''
     for column, value in columns_value.items():
-        where_part += f"{column}='{value}'"
-        print(where_part)
-    cursor.execute(f"SELECT * FROM {table} WHERE " + where_part)
+        where_part += f"{column}='{value}' AND "
+    # удаление последнего AND
+    where_part =  where_part[0:-4]
+    cursor.execute(f"SELECT * FROM {table} WHERE {where_part}")
 
 
 def insert(table: str, column_values: Dict):
