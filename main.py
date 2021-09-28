@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import os
 from dotenv import load_dotenv, find_dotenv
 
+from models import Theme, Subject
+
 import db
 
 load_dotenv(find_dotenv())
@@ -94,14 +96,19 @@ def check_messages():
 		subject_page = BeautifulSoup(session.get(f'{PORTAL_URL}{subject[-1]}').text, 'lxml')
 		subject_themes_list = subject_page.find('table', class_='table-hover').find_all('tr')[1:]
 		for theme in subject_themes_list:
-			theme 			= theme.find_all('td')
-			theme_title 	= theme[0].text
-			theme_db = db.feach_one('theme', {
-				'name' 		: theme_title,
-				'subject_id': subject[0],
-				'semestr'	: SEMESTR				
-			})
-			print(theme_db)
+			t = Theme()
+			# theme 			= theme.find_all('td')
+			# theme_title 	= theme[0].text
+			# theme_count 	= theme[1].text
+			# theme_db = db.feach_one('theme', {
+			# 	'name' 		: theme_title,
+			# 	'subject_id': subject[0],
+			# 	'semestr'	: SEMESTR				
+			# })
+			# if theme_count == theme_db[4]:
+
+			print(t)
+
 
 # set_data()
 check_messages()
